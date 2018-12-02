@@ -29,7 +29,10 @@ public class User implements UserDetails {
   @Column(unique = true)
   private String username;
   
+  @Column
   private String name;
+  
+  @Column
   private String surname;
 
   @JsonIgnore
