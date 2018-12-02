@@ -14,6 +14,6 @@ public class UserDTO {
 
   public UserDTO(User user) {
     this.id = user.getId();
-    this.username = user.getUsername();
+    this.username = user.getUsername();    
   }
 }

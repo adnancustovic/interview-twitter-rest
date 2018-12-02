@@ -28,6 +28,9 @@ public class User implements UserDetails {
 
   @Column(unique = true)
   private String username;
+  
+  private String name;
+  private String surname;
 
   @JsonIgnore
   @ManyToMany
@@ -40,9 +43,11 @@ public class User implements UserDetails {
   @JsonIgnore
   private String password;
 
-  public User(String username, String password) {
+  public User(String username, String password, String name, String surname) {
     this.username = username;
     this.password = password;
+    this.name = name;
+    this.surname = surname;
   }
 
   public void addFollowing(User... users){
