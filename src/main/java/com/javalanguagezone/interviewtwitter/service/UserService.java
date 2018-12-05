@@ -51,9 +51,7 @@ public class UserService implements UserDetailsService {
 
   @Transactional
   public UserProfileDTO getUserProfile(Principal principal) {
-      System.err.println("principal:" + (principal == null));
     User user = getUser(principal.getName());
-    System.out.println(user.getName() + ";" + user.getUsername());
     int tweetCount = (tweetRepository.findAllByAuthor(user) != null)?tweetRepository.findAllByAuthor(user).size():0;
     return new UserProfileDTO(user, tweetCount);
   }
@@ -65,7 +63,6 @@ public class UserService implements UserDetailsService {
         User user = getUser(username);
         usernameExists = user != null;
     }
-      System.err.println("usernameExists:" + usernameExists + ";" + username);
     return usernameExists;
   }
 
