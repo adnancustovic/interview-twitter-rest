@@ -51,16 +51,46 @@ public class UserService implements UserDetailsService {
 
   @Transactional
   public UserProfileDTO getUserProfile(Principal principal) {
+      System.err.println("principal:" + (principal == null));
     User user = getUser(principal.getName());
-    int tweetCount = tweetRepository.findAllByAuthor(user).size();
+    System.out.println(user.getName() + ";" + user.getUsername());
+    int tweetCount = (tweetRepository.findAllByAuthor(user) != null)?tweetRepository.findAllByAuthor(user).size():0;
     return new UserProfileDTO(user, tweetCount);
   }
 
+  @Transactional
+  public boolean usernameExists(String username) {
+    boolean usernameExists = false;
+    if (username != null) {
+        User user = getUser(username);
+        usernameExists = user != null;
+    }
+      System.err.println("usernameExists:" + usernameExists + ";" + username);
+    return usernameExists;
+  }
+
+  public UserDTO createUser(UserDTO userDTO) {
+    if(usernameExists(userDTO.getUsername())) 
+      throw new InvalidUserException(userDTO.getUsername());
+    
+    User user = new User(userDTO.getUsername(), userDTO.getPassword(), userDTO.getName(), userDTO.getSurname());
+    User saved = userRepository.save(user);
+    return new UserDTO(saved);
+  }
+  
   private User getUser(String username) {
     return userRepository.findOneByUsername(username);
   }
 
   private List<UserDTO> convertUsersToDTOs(Set<User> users) {
     return users.stream().map(UserDTO::new).collect(toList());
+  }
+  
+  
+  public static class InvalidUserException extends RuntimeException {
+
+    private InvalidUserException(String username) {
+      super("'" +  username + "'");
+    }
   }
 }

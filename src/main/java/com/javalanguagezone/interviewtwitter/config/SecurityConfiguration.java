@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -39,6 +40,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .and().httpBasic()
       .and().sessionManagement().sessionCreationPolicy(STATELESS)
       .and().csrf().disable();
+  }
+  
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().antMatchers("/validate/**").antMatchers("/register");
   }
 
   @Bean

@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.Collection;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 public class UserController {
@@ -16,6 +21,12 @@ public class UserController {
 
   public UserController(UserService userService) {
     this.userService = userService;
+  }
+
+  @PostMapping("/register")
+  @ResponseStatus(CREATED)
+  public UserDTO register(@RequestBody UserDTO user) {
+    return userService.createUser(user);
   }
 
   @GetMapping("/followers")
@@ -31,5 +42,10 @@ public class UserController {
   @GetMapping("/profile")
   public UserProfileDTO profile(Principal principal) {
     return userService.getUserProfile(principal);
+  }
+  
+  @GetMapping("/validate/{username}")
+  public boolean validateUsername (@PathVariable String username) {
+     return userService.usernameExists(username);
   }
 }
